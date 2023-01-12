@@ -137,7 +137,8 @@ class MAMLReinforcementLearning(object):
         for weight_key in self.weights:
           self.e_weights[weight_key] = tf.Variable(
               tf.zeros(self.weights[weight_key].shape),
-              name='offset_%s' % weight_key)
+              name=f'offset_{weight_key}',
+          )
         self.e_weights['policy_logstd'] = tf.Variable(0.0, name='log_std')
     if not self.learn_inner_lr_tensor:
       self.inner_lr = tf.Variable(self.inner_lr_init, name='inner_lr')
@@ -147,7 +148,8 @@ class MAMLReinforcementLearning(object):
         for weight_key in self.weights:
           self.inner_lr[weight_key] = tf.Variable(
               self.inner_lr_init * tf.ones(self.weights[weight_key].shape),
-              name='inner_lr_%s' % weight_key)
+              name=f'inner_lr_{weight_key}',
+          )
     if self.learn_advantage_function_inner:
       self.adv_weights = self.advantage_generator.construct_network_weights(
           'advantage')
@@ -594,6 +596,7 @@ class MAMLReinforcementLearning(object):
         if self.outer_lr_decay:
           samples[self.outer_lr_ph] = self.outer_lr_init * (
               1. - float(step) / self.num_outer_iterations)
+        # Key2: second gradient
         session.run(self.apply_grads_outer, samples)
       print('avg train reward: %f' % avg_train_reward)
       print('avg test reward: %f' % avg_test_reward)
