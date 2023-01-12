@@ -673,8 +673,9 @@ class MAMLReinforcementLearning(object):
     self._compute_returns_and_values(task_idx, test_rollouts)
     test_reward = self._compute_advantages(test_rollouts)
     test_rollouts_flat = self._flatten_rollouts(test_rollouts)
-    print('Task {}: train_rewards: {}, test_reward: {}'.format(
-        task_idx, train_reward, test_reward))
+    print(
+        f'Task {task_idx}: train_rewards: {train_reward}, test_reward: {test_reward}'
+    )
     return train_rollouts_flat, train_reward, test_rollouts_flat, test_reward
 
   def finetune(self, session, task_modifier):
