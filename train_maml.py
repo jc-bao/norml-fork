@@ -36,6 +36,7 @@ flags.DEFINE_string('config', 'RL_PENDULUM_GYM_CONFIG_META',
 
 def main(argv):
   del argv  # Unused
+  tf.compat.v1.disable_eager_execution()
   config = DotMap(getattr(config_maml, FLAGS.config))
   print('MAML config: %s' % FLAGS.config)
   tf.logging.info('MAML config: %s', FLAGS.config)
