@@ -321,13 +321,14 @@ class MAMLReinforcementLearning(object):
           self.inner_train_advantages.append(train_advantages)
           self.inner_train_losses.append(loss_inner_train)
 
-          grad_inner_train = {}
-          for weight_key in self.weights:
-            grad_inner_train[weight_key] = tf.gradients(
-                loss_inner_train,
-                self.weights[weight_key],
-                name='%s_inner_%d' % (weight_key, idx))[0]
-
+          grad_inner_train = {
+              weight_key: tf.gradients(
+                  loss_inner_train,
+                  self.weights[weight_key],
+                  name='%s_inner_%d' % (weight_key, idx),
+              )[0]
+              for weight_key in self.weights
+          }
           test_weights = {}
           for weight_key in self.weights:
             theta = self.weights[weight_key]
@@ -529,6 +530,7 @@ class MAMLReinforcementLearning(object):
     Raises:
       ValueError: if the loss is NaN
     """
+    # random sample task parameters
     inner_tasks = random.sample(self.task_env_modifiers, self.tasks_batch_size)
     done = False
     avg_test_reward = np.NaN
@@ -546,6 +548,7 @@ class MAMLReinforcementLearning(object):
       tf.logging.info('iteration: %d', self.current_step)
       print('iteration: %d' % self.current_step)
       if not self.fixed_tasks:
+        # each outter loop, resample the task
         inner_tasks = random.sample(self.task_env_modifiers,
                                     self.tasks_batch_size)
 

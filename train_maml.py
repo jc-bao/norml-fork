@@ -28,6 +28,9 @@ import tensorflow.compat.v1 as tf
 from norml import config_maml
 from norml import maml_rl
 
+from icecream import install
+install()
+
 
 FLAGS = flags.FLAGS
 flags.DEFINE_string('config', 'RL_PENDULUM_GYM_CONFIG_META',
